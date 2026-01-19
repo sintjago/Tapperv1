@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tapping Heroes Game</title>
+    <!-- Google Fonts for Hero and Enemy -->
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Pirata+One&family=Nosifer&family=Roboto+Slab:wght@700&family=Bebas+Neue&family=Oswald:wght@700&family=Pacifico&family=Monoton&family=Lobster&family=Anton&family=Arvo&family=Baloo+2&family=Caveat&family=Courgette&family=Fredericka+the+Great&family=Indie+Flower&family=Josefin+Sans&family=Playfair+Display&family=Rubik&family=Varela+Round&family=Zilla+Slab:wght@500&family=MedievalSharp&family=Uncial+Antiqua&family=Metal+Mania&family=Black+Ops+One&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+
+        /* Enemy Letter Styles */
+        #enemy {
+            font-size: 200px;
+            margin-bottom: 5px;
+            font-family: 'Rye', cursive; /* Default evil font */
+            color: red;
+            cursor: pointer; /* Clickable enemy */
+        }
+
+        .health-bar {
+            height: 30px;
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: block;
+        }
+
+        .health-bar-inner {
+            height: 100%;
+            background-color: #e74c3c;
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        #enemy-info {
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        .hero-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+
+        /* Hero letter size */
+        .hero h3 {
+            font-size: 70px;
+            margin: 0;
+            color: #2c3e50;
+            cursor: pointer; /* Clickable hero */
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 5px;
+            margin: 0 5px;
+            border: 1px solid #333;
+            border-radius: 10px;
+            background-color: #f8f8f8;
+            flex: 1;
+            min-width: 70px;
+            max-width: 100px;
+        }
+
+        .hero p {
+            margin: 5px 0;
+        }
+
+        .hero button {
+            margin-top: 5px;
+            padding: 8px;
+            font-size: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .hero button.upgrade {
+            font-size: 10px;
+        }
+
+        .hero button:hover {
+            background-color: #2980b9;
+        }
+
+        .strength-icon {
+            font-size: 16px;
+            margin-right: 5px;
+        }
+
+        /* Dropdown styling */
+        .font-selector {
+            margin-top: 5px;
+            width: 100%;  /* Make the dropdown fit within the hero square */
+        }
+
+        /* Language dropdown */
+        .language-selector {
+            margin: 5px auto;
+            padding: 5px;
+            font-size: 16px;
+            border-radius: 5px;
+            width: 150px;
+        }
+
+        /* Villain font dropdown (same size as language dropdown) */
+        #villain-font-selector {
+            width: 150px;
+            margin-top: 5px;
+        }
+
+        /* Game Mode Selector */
+        .game-mode-selector {
+            margin-top: 15px;
+        }
+
+        /* Centering dropdowns */
+        .dropdown-container {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        /* Popup Modal for Game Mode Selection */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover, .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Timer styling */
+        #timer {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            #enemy {
+                font-size: 120px;
+            }
+
+            .hero {
+                margin: 0 3px;
+                padding: 5px;
+            }
+
+            .hero h3 {
+                font-size: 50px;
+            }
+
+            .hero button {
+                padding: 5px;
+                font-size: 10px;
+            }
+
+            .hero-container {
+                flex-direction: column;
+                margin-top: 10px;
+            }
+
+            .hero {
+                margin-bottom: 10px;
+            }
+
+            #enemy-info {
+                font-size: 16px;
+            }
+
+            #game-container {
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+
+    <div id="enemy" onclick="playVillainSound()">Z</div>
+
+    <div class="dropdown-container">
+        <!-- Language Dropdown -->
+        <select id="language-selector" class="language-selector" onchange="resetGame(this.value)">
+            <option value="english">English</option>
+            <option value="spanish">Spanish</option>
+            <option value="russian">Russian</option>
+            <option value="chinese">Chinese</option>
+            <option value="arabic">Arabic</option>
+            <option value="japanese">Japanese</option>
+        </select>
+
+        <!-- Villain Font Dropdown (with previews) -->
+        <select id="villain-font-selector" class="font-selector" onchange="changeVillainFont(this.value)">
+            <option value="Rye" style="font-family: 'Rye';" selected>Rye</option>
+            <option value="Pirata One" style="font-family: 'Pirata One';">Pirata One</option>
+            <option value="Metal Mania" style="font-family: 'Metal Mania';">Metal Mania</option>
+            <option value="Nosifer" style="font-family: 'Nosifer';">Nosifer</option>
+            <option value="Black Ops One" style="font-family: 'Black Ops One';">Black Ops One</option>
+            <option value="Anton" style="font-family: 'Anton';">Anton</option>
+            <option value="Pacifico" style="font-family: 'Pacifico';">Pacifico</option>
+            <option value="Roboto Slab" style="font-family: 'Roboto Slab';">Roboto Slab</option>
+            <option value="Bebas Neue" style="font-family: 'Bebas Neue';">Bebas Neue</option>
+            <option value="Oswald" style="font-family: 'Oswald';">Oswald</option>
+            <option value="Monoton" style="font-family: 'Monoton';">Monoton</option>
+            <option value="Lobster" style="font-family: 'Lobster';">Lobster</option>
+            <option value="Arvo" style="font-family: 'Arvo';">Arvo</option>
+            <option value="Baloo 2" style="font-family: 'Baloo 2';">Baloo 2</option>
+            <option value="Caveat" style="font-family: 'Caveat';">Caveat</option>
+            <option value="Courgette" style="font-family: 'Courgette';">Courgette</option>
+            <option value="Fredericka the Great" style="font-family: 'Fredericka the Great';">Fredericka the Great</option>
+            <option value="Indie Flower" style="font-family: 'Indie Flower';">Indie Flower</option>
+            <option value="Josefin Sans" style="font-family: 'Josefin Sans';">Josefin Sans</option>
+            <option value="Playfair Display" style="font-family: 'Playfair Display';">Playfair Display</option>
+        </select>
+    </div>
+
+    <!-- Game Mode Selector (positioned under enemy) -->
+    <div class="game-mode-selector">
+        <label><input type="radio" name="mode" value="easy" onchange="selectMode('easy')"> Easy</label>
+        <label><input type="radio" name="mode" value="medium" onchange="selectMode('medium')"> Medium</label>
+        <label><input type="radio" name="mode" value="infinite" onchange="selectMode('infinite')"> Infinite</label>
+    </div>
+
+    <div class="health-bar">
+        <div class="health-bar-inner" id="enemy-health"></div>
+    </div>
+
+    <div id="enemy-info">
+        <div id="current-letter-health">Z's Health: <span id="enemy-health-text">100</span></div>
+        <div style="margin-left: 15px;">G: <span id="gold-amount">0</span></div>
+    </div>
+
+    <div class="hero-container" id="heroes-container"></div>
+
+    <div id="timer"></div>
+</div>
+
+<!-- Modal for Game Mode Descriptions -->
+<div id="gameModeModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p id="mode-description"></p>
+    </div>
+</div>
+
+<!-- Modal for Game Mode Selection on Load -->
+<div id="initialModal" class="modal">
+    <div class="modal-content">
+        <p>Welcome to Tap! Tap! Please choose a difficulty to begin.</p>
+        <button onclick="closeInitialModal()">OK</button>
+    </div>
+</div>
+
+<script>
+    const fontOptions = [
+        'Roboto Slab', 'Bebas Neue', 'Oswald', 'Pacifico', 'Monoton', 'Lobster', 
+        'Anton', 'Arvo', 'Baloo 2', 'Caveat', 'Courgette', 'Fredericka the Great', 
+        'Indie Flower', 'Josefin Sans', 'Playfair Display', 'Rubik', 'Varela Round', 
+        'Zilla Slab', 'Pirata One', 'Rye'
+    ];
+
+    const alphabets = {
+        english: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''),
+        spanish: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''),
+        russian: 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЭЮЯ'.split(''),
+        chinese: '我你他我们你们他们上下左右中大天地人众国心身手足口耳眼山水火金木土日月星明'.split(''),  
+        arabic: 'أبجد هوز حطي كلمن سعف صقر شثخذ ضظغ'.split(''),
+        japanese: 'アイウエオカキクケコサシスセソタチツテトナニヌネノ'.split('')
+    };
+
+    let currentLanguage = 'english';
+    let enemyHealth = 100;
+    let maxEnemyHealth = 100; 
+    let gold = 0;
+    const upgradeCostMultiplier = 1.5;
+    let heroes = {};
+    const heroUpgradeCosts = {};
+    let alphabet = alphabets[currentLanguage];  
+    let currentEnemy = alphabet[alphabet.length - 1];
+    let synth = window.speechSynthesis;
+    let currentUtterance = null;
+    let enemySoundInterval = null;
+    let autoTapIntervals = []; 
+    let currentMode = 'none';  
+    let remainingTime;
+    let timerInterval;
+
+    function resetGame(language) {
+        if (currentMode === 'none') return;  // Do not reset until a mode is chosen
+
+        clearAutoTap();
+        currentLanguage = language;
+        alphabet = [...alphabets[currentLanguage]];  
+        currentEnemy = alphabet[alphabet.length - 1];  
+        enemyHealth = 100; 
+        maxEnemyHealth = 100;
+        gold = 0;  
+        document.getElementById('enemy').textContent = currentEnemy;  
+        document.getElementById('current-letter-health').innerHTML = `${currentEnemy}'s Health: <span id="enemy-health-text">100</span>`;
+        document.getElementById('gold-amount').textContent = gold;  
+        document.getElementById('enemy-health').style.width = '100%';  
+        generateHeroes();  
+        displayHeroes();  
+        initAutoDamage();
+        playVillainSound();  
+    }
+
+    function changeVillainFont(selectedFont) {
+        document.getElementById('enemy').style.fontFamily = selectedFont;
+    }
+
+    function selectMode(mode) {
+        currentMode = mode;
+        resetGame(currentLanguage); 
+        clearInterval(timerInterval);  
+        showModeDescription(mode);
+        if (mode !== 'infinite') {
+            startTimer(mode === 'easy' ? 10 * 60 : 30 * 60); 
+        }
+    }
+
+    function showModeDescription(mode) {
+        const modal = document.getElementById("gameModeModal");
+        const description = document.getElementById("mode-description");
+        let text = "";
+
+        switch (mode) {
+            case 'easy':
+                text = "Welcome to easy mode! Will you defeat the alphabet in 10 minutes? They are asleep right now. Attack!";
+                break;
+            case 'medium':
+                text = "Welcome to medium mode! Will you defeat the alphabet in 30 minutes? It will be a challenge but I have faith in you!";
+                break;
+            case 'infinite':
+                text = "Welcome to an endless trial. The enemies never end. How many will you defeat before surrender?";
+                break;
+        }
+        description.textContent = text;
+        modal.style.display = "block";
+    }
+
+    function closeModal() {
+        const modal = document.getElementById("gameModeModal");
+        modal.style.display = "none";
+    }
+
+    function startTimer(duration) {
+        remainingTime = duration;
+        timerInterval = setInterval(() => {
+            remainingTime--;
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+            document.getElementById('timer').textContent = `Time: ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+            if (remainingTime <= 0) {
+                clearInterval(timerInterval);
+                document.getElementById('timer').textContent = "You lose! Better luck next time.";
+                disableGame();
+            }
+        }, 1000);
+    }
+
+    function disableGame() {
+        const buttons = document.querySelectorAll("button");
+        buttons.forEach(button => button.disabled = true);
+    }
+
+    function clearAutoTap() {
+        autoTapIntervals.forEach(interval => clearInterval(interval));
+        autoTapIntervals = [];
+    }
+
+    function generateHeroes() {
+        heroes = {};  
+        const selectedHeroes = [];
+        while (selectedHeroes.length < 3) {
+            const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+            if (!selectedHeroes.includes(randomLetter)) {
+                const strength = Math.floor(Math.random() * 5) + 1;
+                selectedHeroes.push(randomLetter);
+                heroes[randomLetter] = { strength: strength, speed: 1000 };
+                heroUpgradeCosts[randomLetter] = 10; 
+            }
+        }
+    }
+
+    function displayHeroes() {
+        const heroesContainer = document.getElementById('heroes-container');
+        heroesContainer.innerHTML = '';  
+        for (const hero in heroes) {
+            const heroDiv = document.createElement('div');
+            heroDiv.classList.add('hero');
+            const fontSelectorHTML = generateFontSelector(hero); 
+            heroDiv.innerHTML = `
+                <h3 class="hero-letter" id="hero-${hero}" style="font-family: 'Rye'" onclick="playHeroSound('${hero}')">${hero}</h3>
+                <p><span class="strength-icon">💪</span><span id="hero-${hero}-strength">${heroes[hero].strength}</span></p>
+                <button onclick="tap('${hero}')">Tap ${hero}</button>
+                <button class="upgrade" onclick="upgradeHero('${hero}')">Lv+ (${heroUpgradeCosts[hero]}G)</button>
+                ${fontSelectorHTML}
+            `;
+            heroesContainer.appendChild(heroDiv);
+        }
+    }
+
+    function generateFontSelector(hero) {
+        let dropdown = `<select class="font-selector" onchange="changeFont(this.value, '${hero}')">`;
+        fontOptions.forEach(font => {
+            dropdown += `<option value="${font}" style="font-family: '${font}'">${font}</option>`;
+        });
+        dropdown += '</select>';
+        return dropdown;
+    }
+
+    function changeFont(selectedFont, hero) {
+        document.getElementById(`hero-${hero}`).style.fontFamily = selectedFont;
+    }
+
+    function startAutoTap(hero) {
+        const interval = setInterval(() => {
+            applyDamage(hero);
+        }, heroes[hero].speed);
+        autoTapIntervals.push(interval);
+    }
+
+    function initAutoDamage() {
+        for (const hero in heroes) {
+            startAutoTap(hero);
+        }
+    }
+
+    function tap(hero) {
+        applyDamage(hero);
+        playHeroSound(hero);  
+    }
+
+    function applyDamage(hero) {
+        if (enemyHealth > 0) {
+            enemyHealth -= heroes[hero].strength;
+            if (enemyHealth < 0) enemyHealth = 0;
+            updateHealth();
+            gold += heroes[hero].strength;  
+            updateGold();
+            if (enemyHealth <= 0) {
+                nextEnemy();
+            }
+        }
+    }
+
+    function upgradeHero(hero) {
+        if (gold >= heroUpgradeCosts[hero]) {
+            gold -= heroUpgradeCosts[hero];
+            heroes[hero].strength += 1; 
+            heroUpgradeCosts[hero] = Math.floor(heroUpgradeCosts[hero] * upgradeCostMultiplier); 
+            document.getElementById(`hero-${hero}-strength`).textContent = heroes[hero].strength;
+            updateGold();
+            displayHeroes(); 
+        } else {
+            alert('Not enough G to upgrade!');
+        }
+    }
+
+    function updateHealth() {
+        const healthBar = document.getElementById('enemy-health');
+        const healthText = document.getElementById('enemy-health-text');
+        const healthPercentage = (enemyHealth / maxEnemyHealth) * 100;
+        healthBar.style.width = healthPercentage + '%';
+        healthText.textContent = Math.max(0, enemyHealth);
+    }
+
+    function updateGold() {
+        document.getElementById('gold-amount').textContent = gold;
+    }
+
+    function nextEnemy() {
+        const nextEnemyIndex = alphabet.indexOf(currentEnemy) - 1;
+        if (nextEnemyIndex >= 0) {
+            currentEnemy = alphabet[nextEnemyIndex];
+            maxEnemyHealth += 25;
+            enemyHealth = maxEnemyHealth;
+        } else if (currentMode === 'infinite') {
+            resetGame(currentLanguage);  
+        } else {
+            alert('You defeated all enemies!');
+            return;  
+        }
+        document.getElementById('enemy').textContent = currentEnemy;
+        document.getElementById('current-letter-health').innerHTML = `${currentEnemy}'s Health: <span id="enemy-health-text">${maxEnemyHealth}</span>`;
+        updateHealth();
+        playVillainSound();
+        if (enemySoundInterval) {
+            clearInterval(enemySoundInterval);
+        }
+        enemySoundInterval = setInterval(() => {
+            playVillainSound();
+        }, 3000);
+    }
+
+    function playVillainSound() {
+        if (currentUtterance) {
+            synth.cancel(); 
+        }
+        currentUtterance = new SpeechSynthesisUtterance(currentEnemy);
+        currentUtterance.lang = getSynthLang(currentLanguage);
+        currentUtterance.rate = 1.2;
+        synth.speak(currentUtterance);
+    }
+
+    function playHeroSound(heroLetter) {
+        if (currentUtterance) {
+            synth.cancel();  
+        }
+        currentUtterance = new SpeechSynthesisUtterance(heroLetter);
+        currentUtterance.lang = getSynthLang(currentLanguage);  
+        currentUtterance.rate = 1.2;
+        synth.speak(currentUtterance);
+    }
+
+    function getSynthLang(language) {
+        switch (language) {
+            case 'english': return 'en';
+            case 'spanish': return 'es';
+            case 'russian': return 'ru';
+            case 'chinese': return 'zh-CN';
+            case 'arabic': return 'ar';
+            case 'japanese': return 'ja';
+            default: return 'en';
+        }
+    }
+
+    function closeInitialModal() {
+        const initialModal = document.getElementById("initialModal");
+        initialModal.style.display = "none";
+    }
+
+    window.onload = function() {
+        const initialModal = document.getElementById("initialModal");
+        initialModal.style.display = "block";
+    }
+</script>
+
+</body>
+</html>
