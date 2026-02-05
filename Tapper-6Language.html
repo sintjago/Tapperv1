@@ -365,7 +365,7 @@
 </head>
 <body>
 
-<button id="sound-toggle" onclick="toggleSound()">🔊 Sound On</button>
+<button id="sound-toggle" onclick="toggleSound()" aria-label="Toggle sound on or off" aria-pressed="false">🔊 Sound On</button>
 
 <div id="game-container">
 
@@ -425,7 +425,7 @@
 
     <div class="hero-container" id="heroes-container"></div>
 
-    <div id="combo-counter"></div>
+    <div id="combo-counter" aria-live="polite" aria-atomic="true"></div>
 
     <div id="stats-panel">
         <div class="stat-item">Enemies Defeated: <span id="enemies-defeated">0</span></div>
@@ -457,6 +457,8 @@
     const COMBO_DAMAGE_MULTIPLIER = 0.1;
     const COMBO_TIMEOUT_MS = 2000;
     const PARTICLE_COUNT = 15;
+    const PARTICLE_BASE_DISTANCE = 100;
+    const PARTICLE_RANDOM_DISTANCE = 50;
 
     const fontOptions = [
         'Roboto Slab', 'Bebas Neue', 'Oswald', 'Pacifico', 'Monoton', 'Lobster', 
@@ -784,13 +786,19 @@
         if (soundEnabled) {
             button.textContent = '🔊 Sound On';
             button.classList.remove('muted');
+            button.setAttribute('aria-pressed', 'false');
         } else {
             button.textContent = '🔇 Sound Off';
             button.classList.add('muted');
+            button.setAttribute('aria-pressed', 'true');
             if (synth.speaking) {
                 synth.cancel();
             }
         }
+    }
+
+    function getComboBonusPercent() {
+        return Math.round(comboCount * COMBO_DAMAGE_MULTIPLIER * 100);
     }
 
     function showDamageNumber(damage, isCombo) {
@@ -800,7 +808,7 @@
         const rect = enemyElement.getBoundingClientRect();
         const damageNum = document.createElement('div');
         damageNum.className = 'damage-number';
-        const comboBonus = isCombo && comboCount > 0 ? Math.round(comboCount * COMBO_DAMAGE_MULTIPLIER * 100) : 0;
+        const comboBonus = isCombo && comboCount > 0 ? getComboBonusPercent() : 0;
         damageNum.textContent = comboBonus > 0 ? `-${damage} (+${comboBonus}%)` : `-${damage}`;
         damageNum.style.left = (rect.left + rect.width / 2) + 'px';
         damageNum.style.top = (rect.top + rect.height / 2) + 'px';
@@ -836,7 +844,7 @@
     function updateCombo() {
         const comboElement = document.getElementById('combo-counter');
         if (comboCount > 0) {
-            const bonusPercent = Math.round(comboCount * COMBO_DAMAGE_MULTIPLIER * 100);
+            const bonusPercent = getComboBonusPercent();
             comboElement.textContent = `Combo! +${bonusPercent}% Damage`;
         } else {
             comboElement.textContent = '';
@@ -859,7 +867,7 @@
             particle.style.position = 'fixed';
             
             const angle = (Math.PI * 2 * i) / PARTICLE_COUNT;
-            const distance = 100 + Math.random() * 50;
+            const distance = PARTICLE_BASE_DISTANCE + Math.random() * PARTICLE_RANDOM_DISTANCE;
             const tx = Math.cos(angle) * distance;
             const ty = Math.sin(angle) * distance;
             
