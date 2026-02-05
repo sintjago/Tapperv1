@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tapping Heroes Game</title>
+    <title>Language Learning Adventure - Master the Alphabet!</title>
     <!-- Google Fonts for Hero and Enemy -->
     <link href="https://fonts.googleapis.com/css2?family=Rye&family=Pirata+One&family=Nosifer&family=Roboto+Slab:wght@700&family=Bebas+Neue&family=Oswald:wght@700&family=Pacifico&family=Monoton&family=Lobster&family=Anton&family=Arvo&family=Baloo+2&family=Caveat&family=Courgette&family=Fredericka+the+Great&family=Indie+Flower&family=Josefin+Sans&family=Playfair+Display&family=Rubik&family=Varela+Round&family=Zilla+Slab:wght@500&family=MedievalSharp&family=Uncial+Antiqua&family=Metal+Mania&family=Black+Ops+One&display=swap" rel="stylesheet">
     <style>
@@ -680,6 +680,252 @@
                 font-size: 24px;
             }
         }
+
+        /* Language Learning Features */
+        #game-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            color: white;
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        #game-header h1 {
+            margin: 0 0 10px 0;
+            font-size: 32px;
+            font-weight: 800;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        #game-header .subtitle {
+            font-size: 16px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .language-info {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .language-badge {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: #2c3e50;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .language-badge .flag {
+            font-size: 24px;
+        }
+
+        .alphabet-progress {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .alphabet-progress-title {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(to bottom, #e0e0e0, #f0f0f0);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+        }
+
+        .progress-percentage {
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .educational-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .edu-stat-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border: 2px solid #e8e8e8;
+            transition: all 0.3s ease;
+        }
+
+        .edu-stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .edu-stat-card .stat-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .edu-stat-card .stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: #667eea;
+            margin: 5px 0;
+        }
+
+        .edu-stat-card .stat-label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .achievement-badges {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        .achievement-badge {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .achievement-badge.unlocked {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        .achievement-badge.locked {
+            opacity: 0.3;
+            filter: grayscale(100%);
+        }
+
+        @keyframes badgePulse {
+            0%, 100% {
+                box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3);
+            }
+            50% {
+                box-shadow: 0 4px 16px rgba(255, 215, 0, 0.6);
+            }
+        }
+
+        @keyframes achievementPop {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .achievement-badge:hover {
+            transform: scale(1.1);
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(44, 62, 80, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .achievement-badge:hover .tooltip {
+            opacity: 1;
+        }
+
+        .current-letter-info {
+            background: linear-gradient(135deg, #e8f4f8 0%, #b8e0f6 100%);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 10px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .current-letter-info strong {
+            color: #2c3e50;
+            font-size: 18px;
+        }
+
+        .learning-tip {
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe0b3 100%);
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #f39c12;
+            font-size: 14px;
+            color: #2c3e50;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .learning-tip::before {
+            content: "💡 ";
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
@@ -688,17 +934,95 @@
 
 <div id="game-container">
 
+    <!-- Language Learning Header -->
+    <div id="game-header">
+        <h1>🌍 Language Learning Adventure</h1>
+        <div class="subtitle">Master Alphabets, One Letter at a Time!</div>
+    </div>
+
+    <!-- Educational Stats Dashboard -->
+    <div class="educational-stats">
+        <div class="edu-stat-card">
+            <div class="stat-icon">📚</div>
+            <div class="stat-value" id="letters-learned">0</div>
+            <div class="stat-label">Letters Learned</div>
+        </div>
+        <div class="edu-stat-card">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-value" id="current-position">1</div>
+            <div class="stat-label">Current Position</div>
+        </div>
+        <div class="edu-stat-card">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-value" id="alphabets-completed">0</div>
+            <div class="stat-label">Alphabets Done</div>
+        </div>
+        <div class="edu-stat-card">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-value" id="learning-streak">1</div>
+            <div class="stat-label">Day Streak</div>
+        </div>
+    </div>
+
+    <!-- Alphabet Progress Tracker -->
+    <div class="alphabet-progress">
+        <div class="alphabet-progress-title">Alphabet Progress</div>
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="alphabet-progress-bar" style="width: 0%">
+                <span class="progress-percentage" id="progress-percentage">0%</span>
+            </div>
+        </div>
+        <div style="margin-top: 10px; text-align: center; color: #666; font-size: 14px;">
+            <span id="letters-count">0/26</span> letters conquered
+        </div>
+    </div>
+
+    <!-- Current Letter Learning Info -->
+    <div class="current-letter-info">
+        <strong>Now Learning:</strong> <span id="current-letter-display">Letter Z</span>
+        <span style="margin-left: 10px; font-size: 20px;" id="current-language-flag">🇬🇧</span>
+    </div>
+
+    <!-- Learning Tip -->
+    <div class="learning-tip" id="learning-tip">
+        Tap the letters below to help defeat the enemy and learn the alphabet!
+    </div>
+
+    <!-- Achievement Badges -->
+    <div class="achievement-badges">
+        <div class="achievement-badge locked" id="badge-first-letter" data-tooltip="First Letter!">
+            <span>🌟</span>
+            <span class="tooltip">First Letter!</span>
+        </div>
+        <div class="achievement-badge locked" id="badge-five-letters" data-tooltip="5 Letters Mastered">
+            <span>⭐</span>
+            <span class="tooltip">5 Letters Mastered</span>
+        </div>
+        <div class="achievement-badge locked" id="badge-half-alphabet" data-tooltip="Half Way There!">
+            <span>💫</span>
+            <span class="tooltip">Half Way There!</span>
+        </div>
+        <div class="achievement-badge locked" id="badge-full-alphabet" data-tooltip="Alphabet Master!">
+            <span>🏅</span>
+            <span class="tooltip">Alphabet Master!</span>
+        </div>
+        <div class="achievement-badge locked" id="badge-polyglot" data-tooltip="Polyglot: 3 Languages">
+            <span>🌐</span>
+            <span class="tooltip">Polyglot: 3 Languages</span>
+        </div>
+    </div>
+
     <div id="enemy" onclick="playVillainSound()">Z</div>
 
     <div class="dropdown-container">
         <!-- Language Dropdown -->
         <select id="language-selector" class="language-selector" onchange="resetGame(this.value)">
-            <option value="english">English</option>
-            <option value="spanish">Spanish</option>
-            <option value="russian">Russian</option>
-            <option value="chinese">Chinese</option>
-            <option value="arabic">Arabic</option>
-            <option value="japanese">Japanese</option>
+            <option value="english">🇬🇧 English</option>
+            <option value="spanish">🇪🇸 Spanish</option>
+            <option value="russian">🇷🇺 Russian</option>
+            <option value="chinese">🇨🇳 Chinese</option>
+            <option value="arabic">🇸🇦 Arabic</option>
+            <option value="japanese">🇯🇵 Japanese</option>
         </select>
 
         <!-- Villain Font Dropdown (with previews) -->
@@ -817,6 +1141,22 @@
     let enemiesDefeated = 0;
     let totalDamage = 0;
     let manualTaps = 0;
+
+    // Educational tracking variables
+    let lettersLearned = 0;
+    let alphabetsCompleted = 0;
+    let learningStreak = 1;
+    let completedLanguages = [];
+
+    // Language metadata
+    const languageInfo = {
+        english: { flag: '🇬🇧', name: 'English', size: 26 },
+        spanish: { flag: '🇪🇸', name: 'Spanish', size: 26 },
+        russian: { flag: '🇷🇺', name: 'Russian', size: 33 },
+        chinese: { flag: '🇨🇳', name: 'Chinese', size: 36 },
+        arabic: { flag: '🇸🇦', name: 'Arabic', size: 28 },
+        japanese: { flag: '🇯🇵', name: 'Japanese', size: 30 }
+    };
 
     function resetGame(language) {
         if (currentMode === 'none') return;  // Do not reset until a mode is chosen
@@ -1038,14 +1378,26 @@
 
     function nextEnemy() {
         const nextEnemyIndex = alphabet.indexOf(currentEnemy) - 1;
+        
+        // Track learning progress
+        lettersLearned++;
+        updateEducationalStats();
+        checkAchievements();
+        
         if (nextEnemyIndex >= 0) {
             currentEnemy = alphabet[nextEnemyIndex];
             maxEnemyHealth += 25;
             enemyHealth = maxEnemyHealth;
+            
+            // Update learning tip
+            updateLearningTip();
         } else if (currentMode === 'infinite') {
+            // Alphabet completed!
+            onAlphabetComplete();
             resetGame(currentLanguage);  
         } else {
-            alert('You defeated all enemies!');
+            onAlphabetComplete();
+            alert(`🎉 Congratulations! You've mastered the ${languageInfo[currentLanguage].name} alphabet!`);
             return;  
         }
         document.getElementById('enemy').textContent = currentEnemy;
@@ -1058,6 +1410,142 @@
         enemySoundInterval = setInterval(() => {
             playVillainSound();
         }, 3000);
+    }
+
+    // Educational tracking functions
+    function updateEducationalStats() {
+        const totalLetters = alphabet.length;
+        const currentIndex = alphabet.indexOf(currentEnemy);
+        const learnedCount = totalLetters - currentIndex;
+        const progress = (learnedCount / totalLetters) * 100;
+        
+        // Update display
+        document.getElementById('letters-learned').textContent = learnedCount;
+        document.getElementById('current-position').textContent = currentIndex + 1;
+        document.getElementById('alphabets-completed').textContent = alphabetsCompleted;
+        document.getElementById('learning-streak').textContent = learningStreak;
+        
+        // Update progress bar
+        const progressBar = document.getElementById('alphabet-progress-bar');
+        const progressPercentage = document.getElementById('progress-percentage');
+        progressBar.style.width = progress + '%';
+        progressPercentage.textContent = Math.round(progress) + '%';
+        
+        // Update letter count
+        document.getElementById('letters-count').textContent = `${learnedCount}/${totalLetters}`;
+        
+        // Update current letter display
+        document.getElementById('current-letter-display').textContent = `Letter ${currentEnemy}`;
+        document.getElementById('current-language-flag').textContent = languageInfo[currentLanguage].flag;
+    }
+
+    function onAlphabetComplete() {
+        alphabetsCompleted++;
+        
+        // Track completed languages
+        if (!completedLanguages.includes(currentLanguage)) {
+            completedLanguages.push(currentLanguage);
+        }
+        
+        // Save to localStorage
+        localStorage.setItem('alphabetsCompleted', alphabetsCompleted);
+        localStorage.setItem('completedLanguages', JSON.stringify(completedLanguages));
+        
+        updateEducationalStats();
+        checkAchievements();
+    }
+
+    function checkAchievements() {
+        const currentIndex = alphabet.indexOf(currentEnemy);
+        const learnedCount = alphabet.length - currentIndex;
+        
+        // First Letter
+        if (learnedCount >= 1) {
+            unlockBadge('badge-first-letter');
+        }
+        
+        // 5 Letters
+        if (learnedCount >= 5) {
+            unlockBadge('badge-five-letters');
+        }
+        
+        // Half Alphabet
+        if (learnedCount >= Math.floor(alphabet.length / 2)) {
+            unlockBadge('badge-half-alphabet');
+        }
+        
+        // Full Alphabet
+        if (learnedCount >= alphabet.length) {
+            unlockBadge('badge-full-alphabet');
+        }
+        
+        // Polyglot (3 languages)
+        if (completedLanguages.length >= 3) {
+            unlockBadge('badge-polyglot');
+        }
+    }
+
+    function unlockBadge(badgeId) {
+        const badge = document.getElementById(badgeId);
+        if (badge && badge.classList.contains('locked')) {
+            badge.classList.remove('locked');
+            badge.classList.add('unlocked');
+            
+            // Show celebration
+            showAchievementPopup(badge.querySelector('.tooltip').textContent);
+        }
+    }
+
+    function showAchievementPopup(message) {
+        const popup = document.createElement('div');
+        popup.style.cssText = `
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            padding: 20px 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+            font-size: 20px;
+            font-weight: 700;
+            color: #2c3e50;
+            z-index: 10000;
+            animation: achievementPop 0.5s ease;
+        `;
+        popup.textContent = `🎉 ${message}`;
+        document.body.appendChild(popup);
+        
+        setTimeout(() => {
+            popup.style.animation = 'achievementPop 0.5s ease reverse';
+            setTimeout(() => popup.remove(), 500);
+        }, 2500);
+    }
+
+    function updateLearningTip() {
+        const tips = [
+            "Keep tapping! Each defeated letter brings you closer to mastery!",
+            "Try clicking the heroes quickly to build combos!",
+            "Upgrade your heroes to learn faster!",
+            "The more letters you defeat, the stronger you become!",
+            "Every letter learned is a step toward fluency!",
+            "Practice makes perfect! Keep learning!"
+        ];
+        const randomTip = tips[Math.floor(Math.random() * tips.length)];
+        document.getElementById('learning-tip').textContent = randomTip;
+    }
+
+    // Load saved progress
+    function loadProgress() {
+        const saved = localStorage.getItem('alphabetsCompleted');
+        if (saved) {
+            alphabetsCompleted = parseInt(saved);
+        }
+        
+        const savedLanguages = localStorage.getItem('completedLanguages');
+        if (savedLanguages) {
+            completedLanguages = JSON.parse(savedLanguages);
+        }
     }
 
     function playVillainSound() {
@@ -1207,6 +1695,13 @@
     window.onload = function() {
         const initialModal = document.getElementById("initialModal");
         initialModal.style.display = "block";
+        
+        // Load saved progress
+        loadProgress();
+        
+        // Initialize educational stats
+        updateEducationalStats();
+        checkAchievements();
     }
 </script>
 
