@@ -7,64 +7,141 @@
     <!-- Google Fonts for Hero and Enemy -->
     <link href="https://fonts.googleapis.com/css2?family=Rye&family=Pirata+One&family=Nosifer&family=Roboto+Slab:wght@700&family=Bebas+Neue&family=Oswald:wght@700&family=Pacifico&family=Monoton&family=Lobster&family=Anton&family=Arvo&family=Baloo+2&family=Caveat&family=Courgette&family=Fredericka+the+Great&family=Indie+Flower&family=Josefin+Sans&family=Playfair+Display&family=Rubik&family=Varela+Round&family=Zilla+Slab:wght@500&family=MedievalSharp&family=Uncial+Antiqua&family=Metal+Mania&family=Black+Ops+One&display=swap" rel="stylesheet">
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
-            background-color: #f4f4f4;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         #game-container {
-            max-width: 800px;
+            max-width: 850px;
             margin: 0 auto;
-            padding: 10px;
+            padding: 30px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 1;
         }
 
         /* Enemy Letter Styles */
         #enemy {
             font-size: 200px;
-            margin-bottom: 5px;
-            font-family: 'Rye', cursive; /* Default evil font */
-            color: red;
-            cursor: pointer; /* Clickable enemy */
+            margin-bottom: 10px;
+            font-family: 'Rye', cursive;
+            color: #e74c3c;
+            cursor: pointer;
+            text-shadow: 0 0 30px rgba(231, 76, 60, 0.5),
+                         0 0 60px rgba(231, 76, 60, 0.3),
+                         0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        #enemy:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 40px rgba(231, 76, 60, 0.7),
+                         0 0 80px rgba(231, 76, 60, 0.5),
+                         0 6px 12px rgba(0, 0, 0, 0.3);
         }
 
         .health-bar {
-            height: 30px;
+            height: 35px;
             width: 100%;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            margin-top: 10px;
+            background: linear-gradient(to bottom, #34495e, #2c3e50);
+            border-radius: 20px;
+            margin-top: 15px;
             display: block;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3),
+                        0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .health-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+            border-radius: 20px 20px 0 0;
         }
 
         .health-bar-inner {
             height: 100%;
-            background-color: #e74c3c;
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+            background-size: 200% 100%;
             width: 100%;
-            border-radius: 5px;
+            border-radius: 20px;
+            transition: width 0.3s ease-out;
+            box-shadow: 0 0 20px rgba(231, 76, 60, 0.5);
+            animation: healthPulse 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes healthPulse {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(231, 76, 60, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(231, 76, 60, 0.8);
+            }
         }
 
         #enemy-info {
-            font-size: 20px;
+            font-size: 22px;
             display: flex;
             justify-content: center;
-            margin: 15px 0;
+            gap: 40px;
+            margin: 20px 0;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        #enemy-info > div {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .hero-container {
             display: flex;
             justify-content: space-around;
-            margin-top: 10px;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         /* Hero letter size */
@@ -72,44 +149,91 @@
             font-size: 70px;
             margin: 0;
             color: #2c3e50;
-            cursor: pointer; /* Clickable hero */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero h3:hover {
+            transform: scale(1.1);
+            color: #3498db;
         }
 
         .hero {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 5px;
+            padding: 20px 10px;
             margin: 0 5px;
-            border: 1px solid #333;
-            border-radius: 10px;
-            background-color: #f8f8f8;
+            border: 2px solid #e8e8e8;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
             flex: 1;
-            min-width: 70px;
-            max-width: 100px;
+            min-width: 80px;
+            max-width: 120px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .hero:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            border-color: #3498db;
+        }
+
+        .hero:hover::before {
+            left: 100%;
         }
 
         .hero p {
-            margin: 5px 0;
+            margin: 8px 0;
+            font-weight: 600;
+            color: #555;
         }
 
         .hero button {
-            margin-top: 5px;
-            padding: 8px;
-            font-size: 12px;
-            background-color: #3498db;
+            margin-top: 8px;
+            padding: 10px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .hero button.upgrade {
-            font-size: 10px;
+            font-size: 11px;
+            padding: 8px 12px;
         }
 
         .hero button:hover {
-            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .hero button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
         }
 
         .strength-icon {
@@ -119,28 +243,126 @@
 
         /* Dropdown styling */
         .font-selector {
-            margin-top: 5px;
-            width: 100%;  /* Make the dropdown fit within the hero square */
+            margin-top: 8px;
+            width: 100%;
+            padding: 6px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: white;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .font-selector:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         /* Language dropdown */
         .language-selector {
-            margin: 5px auto;
-            padding: 5px;
+            margin: 8px auto;
+            padding: 10px 16px;
             font-size: 16px;
-            border-radius: 5px;
-            width: 150px;
+            font-weight: 600;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            width: 180px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* Villain font dropdown (same size as language dropdown) */
+        .language-selector:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Villain font dropdown */
         #villain-font-selector {
-            width: 150px;
-            margin-top: 5px;
+            width: 180px;
+            margin-top: 8px;
+            padding: 10px 16px;
+            font-size: 16px;
+            font-weight: 600;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #villain-font-selector:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         /* Game Mode Selector */
         .game-mode-selector {
-            margin-top: 15px;
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .game-mode-selector label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 16px;
+            color: #2c3e50;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-mode-selector label:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .game-mode-selector input[type="radio"] {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #667eea;
+            border-radius: 50%;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .game-mode-selector input[type="radio"]:checked {
+            background: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .game-mode-selector input[type="radio"]:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .game-mode-selector input[type="radio"]:checked + span {
+            color: #667eea;
         }
 
         /* Centering dropdowns */
@@ -149,48 +371,110 @@
             justify-content: center;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 25px;
         }
 
         /* Popup Modal for Game Mode Selection */
         .modal {
             display: none; 
             position: fixed;
-            z-index: 1; 
+            z-index: 1000; 
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
         .modal-content {
-            background-color: #fff;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
+            background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+            margin: 10% auto;
+            padding: 40px;
+            border: none;
+            border-radius: 24px;
+            width: 85%;
+            max-width: 550px;
             text-align: center;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.4s ease;
+            position: relative;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-content p {
+            font-size: 20px;
+            color: #2c3e50;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .modal-content button {
+            padding: 14px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .modal-content button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
         }
 
         .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
+            color: #999;
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 35px;
+            font-weight: 300;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            line-height: 1;
         }
 
         .close:hover, .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
+            color: #667eea;
+            transform: rotate(90deg);
         }
 
         /* Timer styling */
         #timer {
-            font-size: 24px;
-            margin: 10px 0;
+            font-size: 28px;
+            margin: 15px 0;
+            font-weight: 700;
+            color: #667eea;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         /* Damage number animation */
@@ -269,47 +553,82 @@
 
         /* Combo counter */
         #combo-counter {
-            font-size: 28px;
-            font-weight: bold;
+            font-size: 32px;
+            font-weight: 800;
             color: #f39c12;
-            margin: 10px 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin: 15px 0;
+            text-shadow: 0 3px 6px rgba(243, 156, 18, 0.3),
+                         0 0 20px rgba(243, 156, 18, 0.2);
+            animation: comboPulse 0.5s ease infinite;
+        }
+
+        @keyframes comboPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
         }
 
         /* Stats panel */
         #stats-panel {
-            margin-top: 15px;
-            padding: 10px;
-            background-color: #ecf0f1;
-            border-radius: 8px;
-            font-size: 14px;
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 16px;
+            font-size: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.5);
         }
 
         .stat-item {
-            margin: 5px 0;
+            margin: 8px 0;
+            font-weight: 600;
+            color: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-item::before {
+            content: '•';
+            color: #667eea;
+            font-size: 20px;
         }
 
         /* Sound toggle button */
         #sound-toggle {
             position: fixed;
-            top: 10px;
-            right: 10px;
-            padding: 10px 15px;
-            background-color: #3498db;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 16px;
+            font-weight: 600;
             z-index: 100;
+            box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
 
         #sound-toggle:hover {
-            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
         }
 
         #sound-toggle.muted {
-            background-color: #e74c3c;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            box-shadow: 0 6px 12px rgba(231, 76, 60, 0.3);
+        }
+
+        #sound-toggle.muted:hover {
+            box-shadow: 0 8px 16px rgba(231, 76, 60, 0.4);
         }
 
         @media (max-width: 768px) {
@@ -409,9 +728,9 @@
 
     <!-- Game Mode Selector (positioned under enemy) -->
     <div class="game-mode-selector">
-        <label><input type="radio" name="mode" value="easy" onchange="selectMode('easy')"> Easy</label>
-        <label><input type="radio" name="mode" value="medium" onchange="selectMode('medium')"> Medium</label>
-        <label><input type="radio" name="mode" value="infinite" onchange="selectMode('infinite')"> Infinite</label>
+        <label><input type="radio" name="mode" value="easy" onchange="selectMode('easy')"><span>Easy</span></label>
+        <label><input type="radio" name="mode" value="medium" onchange="selectMode('medium')"><span>Medium</span></label>
+        <label><input type="radio" name="mode" value="infinite" onchange="selectMode('infinite')"><span>Infinite</span></label>
     </div>
 
     <div class="health-bar">
