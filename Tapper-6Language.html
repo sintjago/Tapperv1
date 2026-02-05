@@ -611,7 +611,7 @@
                 <h3 class="hero-letter" id="hero-${hero}" style="font-family: 'Rye'" onclick="playHeroSound('${hero}')">${hero}</h3>
                 <p><span class="strength-icon">💪</span><span id="hero-${hero}-strength">${heroes[hero].strength}</span></p>
                 <button onclick="tap('${hero}')">Tap ${hero}</button>
-                <button class="upgrade" onclick="upgradeHero('${hero}')">Lv+ (${heroUpgradeCosts[hero]}G)</button>
+                <button class="upgrade" data-hero="${hero}" onclick="upgradeHero('${hero}')">Lv+ (${heroUpgradeCosts[hero]}G)</button>
                 ${fontSelectorHTML}
             `;
             heroesContainer.appendChild(heroDiv);
@@ -655,8 +655,8 @@
 
     function applyDamage(hero, isManualTap = false) {
         if (enemyHealth > 0) {
-            const comboMultiplier = isManualTap ? (1 + getComboMultiplier() * COMBO_DAMAGE_MULTIPLIER) : 1;
-            const damage = heroes[hero].strength * comboMultiplier;
+            const comboBonus = isManualTap ? (comboCount * COMBO_DAMAGE_MULTIPLIER) : 0;
+            const damage = heroes[hero].strength * (1 + comboBonus);
             const roundedDamage = Math.floor(damage);
             enemyHealth -= roundedDamage;
             if (enemyHealth < 0) enemyHealth = 0;
@@ -666,8 +666,10 @@
             
             // Animate enemy hit
             const enemyElement = document.getElementById('enemy');
-            enemyElement.classList.add('enemy-hit');
-            setTimeout(() => enemyElement.classList.remove('enemy-hit'), 300);
+            if (enemyElement) {
+                enemyElement.classList.add('enemy-hit');
+                setTimeout(() => enemyElement.classList.remove('enemy-hit'), 300);
+            }
             
             updateHealth();
             gold += roundedDamage;
@@ -690,15 +692,11 @@
             heroes[hero].strength += 1; 
             heroUpgradeCosts[hero] = Math.floor(heroUpgradeCosts[hero] * upgradeCostMultiplier); 
             document.getElementById(`hero-${hero}-strength`).textContent = heroes[hero].strength;
-            // Update just the upgrade button text instead of redrawing all heroes
-            const upgradeButtons = document.querySelectorAll('.upgrade');
-            upgradeButtons.forEach(button => {
-                const onclickAttr = button.getAttribute('onclick');
-                const match = onclickAttr ? onclickAttr.match(/'(.+?)'/) : null;
-                if (match && match[1] === hero) {
-                    button.textContent = `Lv+ (${heroUpgradeCosts[hero]}G)`;
-                }
-            });
+            // Update just the upgrade button text using data attribute
+            const upgradeButton = document.querySelector(`.upgrade[data-hero="${hero}"]`);
+            if (upgradeButton) {
+                upgradeButton.textContent = `Lv+ (${heroUpgradeCosts[hero]}G)`;
+            }
             updateGold();
         } else {
             alert('Not enough G to upgrade!');
@@ -797,10 +795,13 @@
 
     function showDamageNumber(damage, isCombo) {
         const enemyElement = document.getElementById('enemy');
+        if (!enemyElement) return;
+        
         const rect = enemyElement.getBoundingClientRect();
         const damageNum = document.createElement('div');
         damageNum.className = 'damage-number';
-        damageNum.textContent = isCombo && comboCount > 0 ? `-${damage} x${getComboMultiplier()}` : `-${damage}`;
+        const comboBonus = isCombo && comboCount > 0 ? Math.round(comboCount * COMBO_DAMAGE_MULTIPLIER * 100) : 0;
+        damageNum.textContent = comboBonus > 0 ? `-${damage} (+${comboBonus}%)` : `-${damage}`;
         damageNum.style.left = (rect.left + rect.width / 2) + 'px';
         damageNum.style.top = (rect.top + rect.height / 2) + 'px';
         damageNum.style.position = 'fixed';
@@ -814,8 +815,10 @@
 
     function animateHero(hero) {
         const heroElement = document.getElementById(`hero-${hero}`);
-        heroElement.classList.add('hero-attack');
-        setTimeout(() => heroElement.classList.remove('hero-attack'), 300);
+        if (heroElement) {
+            heroElement.classList.add('hero-attack');
+            setTimeout(() => heroElement.classList.remove('hero-attack'), 300);
+        }
     }
 
     function incrementCombo() {
@@ -833,18 +836,17 @@
     function updateCombo() {
         const comboElement = document.getElementById('combo-counter');
         if (comboCount > 0) {
-            comboElement.textContent = `Combo x${getComboMultiplier()}!`;
+            const bonusPercent = Math.round(comboCount * COMBO_DAMAGE_MULTIPLIER * 100);
+            comboElement.textContent = `Combo! +${bonusPercent}% Damage`;
         } else {
             comboElement.textContent = '';
         }
     }
 
-    function getComboMultiplier() {
-        return comboCount + 1;
-    }
-
     function createParticles() {
         const enemyElement = document.getElementById('enemy');
+        if (!enemyElement) return;
+        
         const rect = enemyElement.getBoundingClientRect();
         const colors = ['#f39c12', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6'];
         
