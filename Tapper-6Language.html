@@ -3,68 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tapping Heroes Game</title>
+    <title>Language Learning Adventure - Master the Alphabet!</title>
     <!-- Google Fonts for Hero and Enemy -->
     <link href="https://fonts.googleapis.com/css2?family=Rye&family=Pirata+One&family=Nosifer&family=Roboto+Slab:wght@700&family=Bebas+Neue&family=Oswald:wght@700&family=Pacifico&family=Monoton&family=Lobster&family=Anton&family=Arvo&family=Baloo+2&family=Caveat&family=Courgette&family=Fredericka+the+Great&family=Indie+Flower&family=Josefin+Sans&family=Playfair+Display&family=Rubik&family=Varela+Round&family=Zilla+Slab:wght@500&family=MedievalSharp&family=Uncial+Antiqua&family=Metal+Mania&family=Black+Ops+One&display=swap" rel="stylesheet">
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(50px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.5),
+                           0 0 40px rgba(102, 126, 234, 0.3),
+                           0 0 60px rgba(102, 126, 234, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(102, 126, 234, 0.8),
+                           0 0 60px rgba(102, 126, 234, 0.5),
+                           0 0 90px rgba(102, 126, 234, 0.3);
+            }
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
-            background-color: #f4f4f4;
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #4facfe, #667eea);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
         }
 
+        /* Floating particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 60% 70%, rgba(255, 255, 255, 0.05) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        /* Glassmorphism container */
         #game-container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 10px;
+            padding: 40px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.3),
+                0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+            animation: float 6s ease-in-out infinite;
+        }
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 1;
         }
 
         /* Enemy Letter Styles */
+        /* Enemy letter with 3D and neon effects */
         #enemy {
-            font-size: 200px;
-            margin-bottom: 5px;
-            font-family: 'Rye', cursive; /* Default evil font */
-            color: red;
-            cursor: pointer; /* Clickable enemy */
+            font-size: 220px;
+            margin-bottom: 20px;
+            font-family: 'Rye', cursive;
+            color: #ff6b6b;
+            cursor: pointer;
+            text-shadow: 
+                0 0 10px rgba(255, 107, 107, 1),
+                0 0 20px rgba(255, 107, 107, 0.8),
+                0 0 30px rgba(255, 107, 107, 0.6),
+                0 0 40px rgba(255, 107, 107, 0.4),
+                0 0 60px rgba(255, 107, 107, 0.3),
+                0 0 80px rgba(255, 107, 107, 0.2),
+                0 8px 16px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            user-select: none;
+            filter: drop-shadow(0 0 20px rgba(255, 107, 107, 0.6));
+            animation: enemyPulse 2s ease-in-out infinite;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        @keyframes enemyPulse {
+            0%, 100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(255, 107, 107, 0.6));
+            }
+            50% {
+                transform: scale(1.02);
+                filter: drop-shadow(0 0 40px rgba(255, 107, 107, 0.8));
+            }
+        }
+
+        #enemy:hover {
+            transform: scale(1.1) rotateY(5deg);
+            text-shadow: 
+                0 0 20px rgba(255, 107, 107, 1),
+                0 0 40px rgba(255, 107, 107, 0.9),
+                0 0 60px rgba(255, 107, 107, 0.7),
+                0 0 80px rgba(255, 107, 107, 0.5),
+                0 0 100px rgba(255, 107, 107, 0.4),
+                0 0 120px rgba(255, 107, 107, 0.3),
+                0 12px 24px rgba(0, 0, 0, 0.5);
+            filter: drop-shadow(0 0 50px rgba(255, 107, 107, 1));
         }
 
         .health-bar {
-            height: 30px;
+            height: 35px;
             width: 100%;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            margin-top: 10px;
+            background: linear-gradient(to bottom, #34495e, #2c3e50);
+            border-radius: 20px;
+            margin-top: 15px;
             display: block;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3),
+                        0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .health-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+            border-radius: 20px 20px 0 0;
         }
 
         .health-bar-inner {
             height: 100%;
-            background-color: #e74c3c;
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+            background-size: 200% 100%;
             width: 100%;
-            border-radius: 5px;
+            border-radius: 20px;
+            transition: width 0.3s ease-out;
+            box-shadow: 0 0 20px rgba(231, 76, 60, 0.5);
+            animation: healthPulse 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes healthPulse {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(231, 76, 60, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(231, 76, 60, 0.8);
+            }
         }
 
         #enemy-info {
-            font-size: 20px;
+            font-size: 22px;
             display: flex;
             justify-content: center;
-            margin: 15px 0;
+            gap: 40px;
+            margin: 20px 0;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        #enemy-info > div {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .hero-container {
             display: flex;
             justify-content: space-around;
-            margin-top: 10px;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         /* Hero letter size */
@@ -72,44 +256,132 @@
             font-size: 70px;
             margin: 0;
             color: #2c3e50;
-            cursor: pointer; /* Clickable hero */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero h3:hover {
+            transform: scale(1.1);
+            color: #3498db;
         }
 
         .hero {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 5px;
+            padding: 20px 10px;
             margin: 0 5px;
-            border: 1px solid #333;
-            border-radius: 10px;
-            background-color: #f8f8f8;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
             flex: 1;
-            min-width: 70px;
-            max-width: 100px;
+            min-width: 90px;
+            max-width: 130px;
+            box-shadow: 
+                0 8px 32px 0 rgba(31, 38, 135, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.2) 50%,
+                transparent 70%
+            );
+            transform: rotate(45deg);
+            transition: all 0.5s;
+        }
+
+        .hero:hover::before {
+            left: 100%;
+        }
+
+        .hero:hover {
+            transform: translateY(-10px) rotateY(5deg) scale(1.05);
+            box-shadow: 
+                0 15px 40px 0 rgba(31, 38, 135, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                0 0 30px rgba(102, 126, 234, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
         }
 
         .hero p {
-            margin: 5px 0;
+            margin: 10px 0;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            font-size: 14px;
         }
 
         .hero button {
-            margin-top: 5px;
-            padding: 8px;
+            margin-top: 10px;
+            padding: 12px 18px;
             font-size: 12px;
-            background-color: #3498db;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 200% auto;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 4px 15px rgba(102, 126, 234, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .hero button:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .hero button.upgrade {
             font-size: 10px;
+            padding: 8px 14px;
         }
 
         .hero button:hover {
-            background-color: #2980b9;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 
+                0 8px 20px rgba(102, 126, 234, 0.5),
+                0 0 30px rgba(102, 126, 234, 0.3);
+            background-position: right center;
+        }
+
+        .hero button:active {
+            transform: translateY(0) scale(0.98);
+            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
         }
 
         .strength-icon {
@@ -119,28 +391,126 @@
 
         /* Dropdown styling */
         .font-selector {
-            margin-top: 5px;
-            width: 100%;  /* Make the dropdown fit within the hero square */
+            margin-top: 8px;
+            width: 100%;
+            padding: 6px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: white;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .font-selector:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         /* Language dropdown */
         .language-selector {
-            margin: 5px auto;
-            padding: 5px;
+            margin: 8px auto;
+            padding: 10px 16px;
             font-size: 16px;
-            border-radius: 5px;
-            width: 150px;
+            font-weight: 600;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            width: 180px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* Villain font dropdown (same size as language dropdown) */
+        .language-selector:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Villain font dropdown */
         #villain-font-selector {
-            width: 150px;
-            margin-top: 5px;
+            width: 180px;
+            margin-top: 8px;
+            padding: 10px 16px;
+            font-size: 16px;
+            font-weight: 600;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #villain-font-selector:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         /* Game Mode Selector */
         .game-mode-selector {
-            margin-top: 15px;
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .game-mode-selector label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 16px;
+            color: #2c3e50;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-mode-selector label:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .game-mode-selector input[type="radio"] {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #667eea;
+            border-radius: 50%;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .game-mode-selector input[type="radio"]:checked {
+            background: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .game-mode-selector input[type="radio"]:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .game-mode-selector input[type="radio"]:checked + span {
+            color: #667eea;
         }
 
         /* Centering dropdowns */
@@ -149,48 +519,264 @@
             justify-content: center;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 25px;
         }
 
         /* Popup Modal for Game Mode Selection */
         .modal {
             display: none; 
             position: fixed;
-            z-index: 1; 
+            z-index: 1000; 
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
         .modal-content {
-            background-color: #fff;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
+            background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+            margin: 10% auto;
+            padding: 40px;
+            border: none;
+            border-radius: 24px;
+            width: 85%;
+            max-width: 550px;
             text-align: center;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.4s ease;
+            position: relative;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-content p {
+            font-size: 20px;
+            color: #2c3e50;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .modal-content button {
+            padding: 14px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .modal-content button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
         }
 
         .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
+            color: #999;
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 35px;
+            font-weight: 300;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            line-height: 1;
         }
 
         .close:hover, .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
+            color: #667eea;
+            transform: rotate(90deg);
         }
 
         /* Timer styling */
         #timer {
-            font-size: 24px;
-            margin: 10px 0;
+            font-size: 28px;
+            margin: 15px 0;
+            font-weight: 700;
+            color: #667eea;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Damage number animation */
+        .damage-number {
+            position: absolute;
+            font-size: 30px;
+            font-weight: bold;
+            color: #ff6b6b;
+            animation: floatUp 1s ease-out forwards;
+            pointer-events: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px);
+            }
+        }
+
+        /* Hero attack animation */
+        .hero-attack {
+            animation: pulse 0.3s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        /* Enemy hit animation */
+        .enemy-hit {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            75% {
+                transform: translateX(10px);
+            }
+        }
+
+        /* Particle effect */
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: particleFly 1s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes particleFly {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty));
+            }
+        }
+
+        /* Combo counter */
+        #combo-counter {
+            font-size: 32px;
+            font-weight: 800;
+            color: #f39c12;
+            margin: 15px 0;
+            text-shadow: 0 3px 6px rgba(243, 156, 18, 0.3),
+                         0 0 20px rgba(243, 156, 18, 0.2);
+            animation: comboPulse 0.5s ease infinite;
+        }
+
+        @keyframes comboPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Stats panel */
+        #stats-panel {
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 16px;
+            font-size: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .stat-item {
+            margin: 8px 0;
+            font-weight: 600;
+            color: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-item::before {
+            content: '•';
+            color: #667eea;
+            font-size: 20px;
+        }
+
+        /* Sound toggle button */
+        #sound-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            z-index: 100;
+            box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        #sound-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        #sound-toggle.muted {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            box-shadow: 0 6px 12px rgba(231, 76, 60, 0.3);
+        }
+
+        #sound-toggle.muted:hover {
+            box-shadow: 0 8px 16px rgba(231, 76, 60, 0.4);
         }
 
         @media (max-width: 768px) {
@@ -228,24 +814,568 @@
             #game-container {
                 padding: 0;
             }
+
+            #sound-toggle {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+
+            #stats-panel {
+                font-size: 12px;
+            }
+
+            .damage-number {
+                font-size: 24px;
+            }
+        }
+
+        /* Language Learning Features */
+        /* Game header with holographic effect */
+        #game-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            color: white;
+            box-shadow: 
+                0 8px 32px rgba(102, 126, 234, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: glow 3s ease-in-out infinite;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        #game-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 70%
+            );
+            animation: shimmer 3s infinite;
+        }
+
+        #game-header h1 {
+            margin: 0 0 10px 0;
+            font-size: 36px;
+            font-weight: 800;
+            text-shadow: 
+                0 0 10px rgba(255, 255, 255, 0.5),
+                0 0 20px rgba(255, 255, 255, 0.3),
+                0 2px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #fff, #f0f0f0, #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 2s linear infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        #game-header .subtitle {
+            font-size: 18px;
+            opacity: 0.95;
+            font-weight: 500;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .language-info {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .language-badge {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: #2c3e50;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .language-badge .flag {
+            font-size: 24px;
+        }
+
+        .alphabet-progress {
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 
+                0 8px 32px 0 rgba(31, 38, 135, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .alphabet-progress-title {
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 15px;
+            font-size: 18px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            letter-spacing: 0.5px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-bar-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 200% 100%;
+            border-radius: 20px;
+            transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 
+                0 0 30px rgba(102, 126, 234, 0.8),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+            position: relative;
+            overflow: hidden;
+            animation: shimmer 2s linear infinite;
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.4),
+                transparent
+            );
+            animation: progressShine 2s infinite;
+        }
+
+        @keyframes progressShine {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        .progress-percentage {
+            color: white;
+            font-weight: 900;
+            font-size: 16px;
+            text-shadow: 
+                0 0 10px rgba(0, 0, 0, 0.5),
+                0 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .educational-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+            perspective: 1000px;
+        }
+
+        .edu-stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 
+                0 8px 32px 0 rgba(31, 38, 135, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .edu-stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: left 0.5s;
+        }
+
+        .edu-stat-card:hover::before {
+            left: 100%;
+        }
+
+        .edu-stat-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 
+                0 15px 40px 0 rgba(31, 38, 135, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                0 0 30px rgba(102, 126, 234, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .edu-stat-card .stat-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .edu-stat-card .stat-value {
+            font-size: 32px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 8px 0;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .edu-stat-card .stat-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .achievement-badges {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            perspective: 1000px;
+        }
+
+        .achievement-badge {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 8px 32px 0 rgba(31, 38, 135, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .achievement-badge::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, 
+                transparent 30%,
+                rgba(255, 255, 255, 0.3) 50%,
+                transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .achievement-badge:hover::before {
+            opacity: 1;
+            animation: rotate 2s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .achievement-badge.unlocked {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+            background-size: 200% 200%;
+            animation: badgePulse 2s ease-in-out infinite, holographic 3s ease-in-out infinite;
+            box-shadow: 
+                0 0 20px rgba(255, 215, 0, 0.6),
+                0 0 40px rgba(255, 215, 0, 0.4),
+                0 4px 16px rgba(255, 215, 0, 0.6);
+        }
+
+        .achievement-badge.unlocked:hover {
+            transform: scale(1.2) rotateY(10deg);
+            box-shadow: 
+                0 0 30px rgba(255, 215, 0, 0.8),
+                0 0 60px rgba(255, 215, 0, 0.6),
+                0 8px 24px rgba(255, 215, 0, 0.8);
+        }
+
+        .achievement-badge.locked {
+            opacity: 0.25;
+            filter: grayscale(100%);
+        }
+
+        .achievement-badge:hover {
+            transform: scale(1.15) translateY(-5px);
+        }
+
+        @keyframes badgePulse {
+            0%, 100% {
+                box-shadow: 
+                    0 0 20px rgba(255, 215, 0, 0.6),
+                    0 0 40px rgba(255, 215, 0, 0.4);
+            }
+            50% {
+                box-shadow: 
+                    0 0 30px rgba(255, 215, 0, 0.8),
+                    0 0 60px rgba(255, 215, 0, 0.6);
+            }
+        }
+
+        @keyframes holographic {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes achievementPop {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .achievement-badge:hover {
+            transform: scale(1.1);
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(44, 62, 80, 0.95);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .achievement-badge:hover .tooltip {
+            opacity: 1;
+        }
+
+        .current-letter-info {
+            background: rgba(184, 224, 246, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 18px;
+            border-radius: 16px;
+            margin: 15px 0;
+            box-shadow: 
+                0 8px 32px 0 rgba(31, 38, 135, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .current-letter-info strong {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 19px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            font-weight: 800;
+        }
+
+        .learning-tip {
+            background: rgba(255, 224, 179, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            border-radius: 14px;
+            margin: 15px 0;
+            border-left: 4px solid rgba(243, 156, 18, 0.8);
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.95);
+            box-shadow: 
+                0 4px 16px rgba(243, 156, 18, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .learning-tip::before {
+            content: "💡 ";
+            font-size: 20px;
+            filter: drop-shadow(0 2px 4px rgba(243, 156, 18, 0.4));
         }
     </style>
 </head>
 <body>
 
+<button id="sound-toggle" onclick="toggleSound()" aria-label="Toggle sound on or off" aria-pressed="true">🔊 Sound On</button>
+
 <div id="game-container">
+
+    <!-- Language Learning Header -->
+    <div id="game-header">
+        <h1>🌍 Language Learning Adventure</h1>
+        <div class="subtitle">Master Alphabets, One Letter at a Time!</div>
+    </div>
+
+    <!-- Educational Stats Dashboard -->
+    <div class="educational-stats">
+        <div class="edu-stat-card">
+            <div class="stat-icon">📚</div>
+            <div class="stat-value" id="letters-learned">0</div>
+            <div class="stat-label">Letters Learned</div>
+        </div>
+        <div class="edu-stat-card">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-value" id="current-position">1</div>
+            <div class="stat-label">Current Position</div>
+        </div>
+        <div class="edu-stat-card">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-value" id="alphabets-completed">0</div>
+            <div class="stat-label">Alphabets Done</div>
+        </div>
+        <div class="edu-stat-card">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-value" id="learning-streak">1</div>
+            <div class="stat-label">Day Streak</div>
+        </div>
+    </div>
+
+    <!-- Alphabet Progress Tracker -->
+    <div class="alphabet-progress">
+        <div class="alphabet-progress-title">Alphabet Progress</div>
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="alphabet-progress-bar" style="width: 0%">
+                <span class="progress-percentage" id="progress-percentage">0%</span>
+            </div>
+        </div>
+        <div style="margin-top: 10px; text-align: center; color: #666; font-size: 14px;">
+            <span id="letters-count">0/26</span> letters conquered
+        </div>
+    </div>
+
+    <!-- Current Letter Learning Info -->
+    <div class="current-letter-info">
+        <strong>Now Learning:</strong> <span id="current-letter-display">Letter Z</span>
+        <span style="margin-left: 10px; font-size: 20px;" id="current-language-flag">🇬🇧</span>
+    </div>
+
+    <!-- Learning Tip -->
+    <div class="learning-tip" id="learning-tip">
+        Tap the letters below to help defeat the enemy and learn the alphabet!
+    </div>
+
+    <!-- Achievement Badges -->
+    <div class="achievement-badges">
+        <div class="achievement-badge locked" id="badge-first-letter" data-tooltip="First Letter!">
+            <span>🌟</span>
+            <span class="tooltip">First Letter!</span>
+        </div>
+        <div class="achievement-badge locked" id="badge-five-letters" data-tooltip="5 Letters Mastered">
+            <span>⭐</span>
+            <span class="tooltip">5 Letters Mastered</span>
+        </div>
+        <div class="achievement-badge locked" id="badge-half-alphabet" data-tooltip="Half Way There!">
+            <span>💫</span>
+            <span class="tooltip">Half Way There!</span>
+        </div>
+        <div class="achievement-badge locked" id="badge-full-alphabet" data-tooltip="Alphabet Master!">
+            <span>🏅</span>
+            <span class="tooltip">Alphabet Master!</span>
+        </div>
+        <div class="achievement-badge locked" id="badge-polyglot" data-tooltip="Polyglot: 3 Languages">
+            <span>🌐</span>
+            <span class="tooltip">Polyglot: 3 Languages</span>
+        </div>
+    </div>
 
     <div id="enemy" onclick="playVillainSound()">Z</div>
 
     <div class="dropdown-container">
         <!-- Language Dropdown -->
         <select id="language-selector" class="language-selector" onchange="resetGame(this.value)">
-            <option value="english">English</option>
-            <option value="spanish">Spanish</option>
-            <option value="russian">Russian</option>
-            <option value="chinese">Chinese</option>
-            <option value="arabic">Arabic</option>
-            <option value="japanese">Japanese</option>
+            <option value="english">🇬🇧 English</option>
+            <option value="spanish">🇪🇸 Spanish</option>
+            <option value="russian">🇷🇺 Russian</option>
+            <option value="chinese">🇨🇳 Chinese</option>
+            <option value="arabic">🇸🇦 Arabic</option>
+            <option value="japanese">🇯🇵 Japanese</option>
         </select>
 
         <!-- Villain Font Dropdown (with previews) -->
@@ -275,9 +1405,9 @@
 
     <!-- Game Mode Selector (positioned under enemy) -->
     <div class="game-mode-selector">
-        <label><input type="radio" name="mode" value="easy" onchange="selectMode('easy')"> Easy</label>
-        <label><input type="radio" name="mode" value="medium" onchange="selectMode('medium')"> Medium</label>
-        <label><input type="radio" name="mode" value="infinite" onchange="selectMode('infinite')"> Infinite</label>
+        <label><input type="radio" name="mode" value="easy" onchange="selectMode('easy')"><span>Easy</span></label>
+        <label><input type="radio" name="mode" value="medium" onchange="selectMode('medium')"><span>Medium</span></label>
+        <label><input type="radio" name="mode" value="infinite" onchange="selectMode('infinite')"><span>Infinite</span></label>
     </div>
 
     <div class="health-bar">
@@ -290,6 +1420,14 @@
     </div>
 
     <div class="hero-container" id="heroes-container"></div>
+
+    <div id="combo-counter" aria-live="polite" aria-atomic="true"></div>
+
+    <div id="stats-panel">
+        <div class="stat-item">Enemies Defeated: <span id="enemies-defeated">0</span></div>
+        <div class="stat-item">Total Damage: <span id="total-damage">0</span></div>
+        <div class="stat-item">Manual Taps: <span id="manual-taps">0</span></div>
+    </div>
 
     <div id="timer"></div>
 </div>
@@ -311,6 +1449,13 @@
 </div>
 
 <script>
+    // Game constants
+    const COMBO_DAMAGE_MULTIPLIER = 0.1;
+    const COMBO_TIMEOUT_MS = 2000;
+    const PARTICLE_COUNT = 15;
+    const PARTICLE_BASE_DISTANCE = 100;
+    const PARTICLE_RANDOM_DISTANCE = 50;
+
     const fontOptions = [
         'Roboto Slab', 'Bebas Neue', 'Oswald', 'Pacifico', 'Monoton', 'Lobster', 
         'Anton', 'Arvo', 'Baloo 2', 'Caveat', 'Courgette', 'Fredericka the Great', 
@@ -343,6 +1488,28 @@
     let currentMode = 'none';  
     let remainingTime;
     let timerInterval;
+    let soundEnabled = true;
+    let comboCount = 0;
+    let comboTimer = null;
+    let enemiesDefeated = 0;
+    let totalDamage = 0;
+    let manualTaps = 0;
+
+    // Educational tracking variables
+    let lettersLearned = 0;
+    let alphabetsCompleted = 0;
+    let learningStreak = 1;
+    let completedLanguages = [];
+
+    // Language metadata
+    const languageInfo = {
+        english: { flag: '🇬🇧', name: 'English', size: 26 },
+        spanish: { flag: '🇪🇸', name: 'Spanish', size: 26 },
+        russian: { flag: '🇷🇺', name: 'Russian', size: 33 },
+        chinese: { flag: '🇨🇳', name: 'Chinese', size: 36 },
+        arabic: { flag: '🇸🇦', name: 'Arabic', size: 28 },
+        japanese: { flag: '🇯🇵', name: 'Japanese', size: 30 }
+    };
 
     function resetGame(language) {
         if (currentMode === 'none') return;  // Do not reset until a mode is chosen
@@ -353,7 +1520,12 @@
         currentEnemy = alphabet[alphabet.length - 1];  
         enemyHealth = 100; 
         maxEnemyHealth = 100;
-        gold = 0;  
+        gold = 0;
+        enemiesDefeated = 0;
+        totalDamage = 0;
+        manualTaps = 0;
+        comboCount = 0;
+        updateStats();
         document.getElementById('enemy').textContent = currentEnemy;  
         document.getElementById('current-letter-health').innerHTML = `${currentEnemy}'s Health: <span id="enemy-health-text">100</span>`;
         document.getElementById('gold-amount').textContent = gold;  
@@ -453,7 +1625,7 @@
                 <h3 class="hero-letter" id="hero-${hero}" style="font-family: 'Rye'" onclick="playHeroSound('${hero}')">${hero}</h3>
                 <p><span class="strength-icon">💪</span><span id="hero-${hero}-strength">${heroes[hero].strength}</span></p>
                 <button onclick="tap('${hero}')">Tap ${hero}</button>
-                <button class="upgrade" onclick="upgradeHero('${hero}')">Lv+ (${heroUpgradeCosts[hero]}G)</button>
+                <button class="upgrade" data-hero="${hero}" onclick="upgradeHero('${hero}')">Lv+ (${heroUpgradeCosts[hero]}G)</button>
                 ${fontSelectorHTML}
             `;
             heroesContainer.appendChild(heroDiv);
@@ -487,18 +1659,42 @@
     }
 
     function tap(hero) {
-        applyDamage(hero);
-        playHeroSound(hero);  
+        applyDamage(hero, true);
+        playHeroSound(hero);
+        animateHero(hero);
+        incrementCombo();
+        manualTaps++;
+        updateStats();
     }
 
-    function applyDamage(hero) {
+    function applyDamage(hero, isManualTap = false) {
         if (enemyHealth > 0) {
-            enemyHealth -= heroes[hero].strength;
+            const comboBonus = isManualTap ? (comboCount * COMBO_DAMAGE_MULTIPLIER) : 0;
+            const damage = heroes[hero].strength * (1 + comboBonus);
+            const roundedDamage = Math.floor(damage);
+            enemyHealth -= roundedDamage;
             if (enemyHealth < 0) enemyHealth = 0;
+            
+            // Show damage number
+            showDamageNumber(roundedDamage, isManualTap);
+            
+            // Animate enemy hit
+            const enemyElement = document.getElementById('enemy');
+            if (enemyElement) {
+                enemyElement.classList.add('enemy-hit');
+                setTimeout(() => enemyElement.classList.remove('enemy-hit'), 300);
+            }
+            
             updateHealth();
-            gold += heroes[hero].strength;  
+            gold += roundedDamage;
+            totalDamage += roundedDamage;
             updateGold();
+            updateStats();
+            
             if (enemyHealth <= 0) {
+                enemiesDefeated++;
+                updateStats();
+                createParticles();
                 nextEnemy();
             }
         }
@@ -510,8 +1706,12 @@
             heroes[hero].strength += 1; 
             heroUpgradeCosts[hero] = Math.floor(heroUpgradeCosts[hero] * upgradeCostMultiplier); 
             document.getElementById(`hero-${hero}-strength`).textContent = heroes[hero].strength;
+            // Update just the upgrade button text using data attribute
+            const upgradeButton = document.querySelector(`.upgrade[data-hero="${hero}"]`);
+            if (upgradeButton) {
+                upgradeButton.textContent = `Lv+ (${heroUpgradeCosts[hero]}G)`;
+            }
             updateGold();
-            displayHeroes(); 
         } else {
             alert('Not enough G to upgrade!');
         }
@@ -531,14 +1731,26 @@
 
     function nextEnemy() {
         const nextEnemyIndex = alphabet.indexOf(currentEnemy) - 1;
+        
+        // Track learning progress
+        lettersLearned++;
+        updateEducationalStats();
+        checkAchievements();
+        
         if (nextEnemyIndex >= 0) {
             currentEnemy = alphabet[nextEnemyIndex];
             maxEnemyHealth += 25;
             enemyHealth = maxEnemyHealth;
+            
+            // Update learning tip
+            updateLearningTip();
         } else if (currentMode === 'infinite') {
+            // Alphabet completed!
+            onAlphabetComplete();
             resetGame(currentLanguage);  
         } else {
-            alert('You defeated all enemies!');
+            onAlphabetComplete();
+            alert(`🎉 Congratulations! You've mastered the ${languageInfo[currentLanguage].name} alphabet!`);
             return;  
         }
         document.getElementById('enemy').textContent = currentEnemy;
@@ -553,7 +1765,144 @@
         }, 3000);
     }
 
+    // Educational tracking functions
+    function updateEducationalStats() {
+        const totalLetters = alphabet.length;
+        const currentIndex = alphabet.indexOf(currentEnemy);
+        const learnedCount = totalLetters - currentIndex;
+        const progress = (learnedCount / totalLetters) * 100;
+        
+        // Update display
+        document.getElementById('letters-learned').textContent = learnedCount;
+        document.getElementById('current-position').textContent = currentIndex + 1;
+        document.getElementById('alphabets-completed').textContent = alphabetsCompleted;
+        document.getElementById('learning-streak').textContent = learningStreak;
+        
+        // Update progress bar
+        const progressBar = document.getElementById('alphabet-progress-bar');
+        const progressPercentage = document.getElementById('progress-percentage');
+        progressBar.style.width = progress + '%';
+        progressPercentage.textContent = Math.round(progress) + '%';
+        
+        // Update letter count
+        document.getElementById('letters-count').textContent = `${learnedCount}/${totalLetters}`;
+        
+        // Update current letter display
+        document.getElementById('current-letter-display').textContent = `Letter ${currentEnemy}`;
+        document.getElementById('current-language-flag').textContent = languageInfo[currentLanguage].flag;
+    }
+
+    function onAlphabetComplete() {
+        alphabetsCompleted++;
+        
+        // Track completed languages
+        if (!completedLanguages.includes(currentLanguage)) {
+            completedLanguages.push(currentLanguage);
+        }
+        
+        // Save to localStorage
+        localStorage.setItem('alphabetsCompleted', alphabetsCompleted);
+        localStorage.setItem('completedLanguages', JSON.stringify(completedLanguages));
+        
+        updateEducationalStats();
+        checkAchievements();
+    }
+
+    function checkAchievements() {
+        const currentIndex = alphabet.indexOf(currentEnemy);
+        const learnedCount = alphabet.length - currentIndex;
+        
+        // First Letter
+        if (learnedCount >= 1) {
+            unlockBadge('badge-first-letter');
+        }
+        
+        // 5 Letters
+        if (learnedCount >= 5) {
+            unlockBadge('badge-five-letters');
+        }
+        
+        // Half Alphabet
+        if (learnedCount >= Math.floor(alphabet.length / 2)) {
+            unlockBadge('badge-half-alphabet');
+        }
+        
+        // Full Alphabet
+        if (learnedCount >= alphabet.length) {
+            unlockBadge('badge-full-alphabet');
+        }
+        
+        // Polyglot (3 languages)
+        if (completedLanguages.length >= 3) {
+            unlockBadge('badge-polyglot');
+        }
+    }
+
+    function unlockBadge(badgeId) {
+        const badge = document.getElementById(badgeId);
+        if (badge && badge.classList.contains('locked')) {
+            badge.classList.remove('locked');
+            badge.classList.add('unlocked');
+            
+            // Show celebration
+            showAchievementPopup(badge.querySelector('.tooltip').textContent);
+        }
+    }
+
+    function showAchievementPopup(message) {
+        const popup = document.createElement('div');
+        popup.style.cssText = `
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            padding: 20px 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+            font-size: 20px;
+            font-weight: 700;
+            color: #2c3e50;
+            z-index: 10000;
+            animation: achievementPop 0.5s ease;
+        `;
+        popup.textContent = `🎉 ${message}`;
+        document.body.appendChild(popup);
+        
+        setTimeout(() => {
+            popup.style.animation = 'achievementPop 0.5s ease reverse';
+            setTimeout(() => popup.remove(), 500);
+        }, 2500);
+    }
+
+    function updateLearningTip() {
+        const tips = [
+            "Keep tapping! Each defeated letter brings you closer to mastery!",
+            "Try clicking the heroes quickly to build combos!",
+            "Upgrade your heroes to learn faster!",
+            "The more letters you defeat, the stronger you become!",
+            "Every letter learned is a step toward fluency!",
+            "Practice makes perfect! Keep learning!"
+        ];
+        const randomTip = tips[Math.floor(Math.random() * tips.length)];
+        document.getElementById('learning-tip').textContent = randomTip;
+    }
+
+    // Load saved progress
+    function loadProgress() {
+        const saved = localStorage.getItem('alphabetsCompleted');
+        if (saved) {
+            alphabetsCompleted = parseInt(saved);
+        }
+        
+        const savedLanguages = localStorage.getItem('completedLanguages');
+        if (savedLanguages) {
+            completedLanguages = JSON.parse(savedLanguages);
+        }
+    }
+
     function playVillainSound() {
+        if (!soundEnabled) return;
         if (currentUtterance) {
             synth.cancel(); 
         }
@@ -564,6 +1913,7 @@
     }
 
     function playHeroSound(heroLetter) {
+        if (!soundEnabled) return;
         if (currentUtterance) {
             synth.cancel();  
         }
@@ -590,9 +1940,121 @@
         initialModal.style.display = "none";
     }
 
+    function toggleSound() {
+        soundEnabled = !soundEnabled;
+        const button = document.getElementById('sound-toggle');
+        if (soundEnabled) {
+            button.textContent = '🔊 Sound On';
+            button.classList.remove('muted');
+            button.setAttribute('aria-pressed', 'true');
+        } else {
+            button.textContent = '🔇 Sound Off';
+            button.classList.add('muted');
+            button.setAttribute('aria-pressed', 'false');
+            if (synth.speaking) {
+                synth.cancel();
+            }
+        }
+    }
+
+    function getComboBonusPercent() {
+        return Math.round(comboCount * COMBO_DAMAGE_MULTIPLIER * 100);
+    }
+
+    function showDamageNumber(damage, isCombo) {
+        const enemyElement = document.getElementById('enemy');
+        if (!enemyElement) return;
+        
+        const rect = enemyElement.getBoundingClientRect();
+        const damageNum = document.createElement('div');
+        damageNum.className = 'damage-number';
+        const comboBonus = isCombo && comboCount > 0 ? getComboBonusPercent() : 0;
+        damageNum.textContent = comboBonus > 0 ? `-${damage} (+${comboBonus}%)` : `-${damage}`;
+        damageNum.style.left = (rect.left + rect.width / 2) + 'px';
+        damageNum.style.top = (rect.top + rect.height / 2) + 'px';
+        damageNum.style.position = 'fixed';
+        if (isCombo && comboCount > 0) {
+            damageNum.style.color = '#f39c12';
+            damageNum.style.fontSize = '40px';
+        }
+        document.body.appendChild(damageNum);
+        setTimeout(() => damageNum.remove(), 1000);
+    }
+
+    function animateHero(hero) {
+        const heroElement = document.getElementById(`hero-${hero}`);
+        if (heroElement) {
+            heroElement.classList.add('hero-attack');
+            setTimeout(() => heroElement.classList.remove('hero-attack'), 300);
+        }
+    }
+
+    function incrementCombo() {
+        comboCount++;
+        updateCombo();
+        if (comboTimer) {
+            clearTimeout(comboTimer);
+        }
+        comboTimer = setTimeout(() => {
+            comboCount = 0;
+            updateCombo();
+        }, COMBO_TIMEOUT_MS);
+    }
+
+    function updateCombo() {
+        const comboElement = document.getElementById('combo-counter');
+        if (comboCount > 0) {
+            const bonusPercent = getComboBonusPercent();
+            comboElement.textContent = `Combo! +${bonusPercent}% Damage`;
+        } else {
+            comboElement.textContent = '';
+        }
+    }
+
+    function createParticles() {
+        const enemyElement = document.getElementById('enemy');
+        if (!enemyElement) return;
+        
+        const rect = enemyElement.getBoundingClientRect();
+        const colors = ['#f39c12', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6'];
+        
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.left = (rect.left + rect.width / 2) + 'px';
+            particle.style.top = (rect.top + rect.height / 2) + 'px';
+            particle.style.position = 'fixed';
+            
+            const angle = (Math.PI * 2 * i) / PARTICLE_COUNT;
+            const distance = PARTICLE_BASE_DISTANCE + Math.random() * PARTICLE_RANDOM_DISTANCE;
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance;
+            
+            particle.style.setProperty('--tx', tx + 'px');
+            particle.style.setProperty('--ty', ty + 'px');
+            
+            document.body.appendChild(particle);
+            setTimeout(() => particle.remove(), 1000);
+        }
+    }
+
+    function updateStats() {
+        document.getElementById('enemies-defeated').textContent = enemiesDefeated;
+        document.getElementById('total-damage').textContent = totalDamage;
+        document.getElementById('manual-taps').textContent = manualTaps;
+    }
+
     window.onload = function() {
         const initialModal = document.getElementById("initialModal");
         initialModal.style.display = "block";
+        
+        // Load saved progress
+        loadProgress();
+        
+        // Initialize educational stats
+        updateEducationalStats();
+        checkAchievements();
     }
 </script>
 
