@@ -365,7 +365,7 @@
 </head>
 <body>
 
-<button id="sound-toggle" onclick="toggleSound()" aria-label="Toggle sound on or off" aria-pressed="false">🔊 Sound On</button>
+<button id="sound-toggle" onclick="toggleSound()" aria-label="Toggle sound on or off" aria-pressed="true">🔊 Sound On</button>
 
 <div id="game-container">
 
@@ -786,11 +786,11 @@
         if (soundEnabled) {
             button.textContent = '🔊 Sound On';
             button.classList.remove('muted');
-            button.setAttribute('aria-pressed', 'false');
+            button.setAttribute('aria-pressed', 'true');
         } else {
             button.textContent = '🔇 Sound Off';
             button.classList.add('muted');
-            button.setAttribute('aria-pressed', 'true');
+            button.setAttribute('aria-pressed', 'false');
             if (synth.speaking) {
                 synth.cancel();
             }
