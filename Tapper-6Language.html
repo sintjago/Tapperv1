@@ -193,6 +193,125 @@
             margin: 10px 0;
         }
 
+        /* Damage number animation */
+        .damage-number {
+            position: absolute;
+            font-size: 30px;
+            font-weight: bold;
+            color: #ff6b6b;
+            animation: floatUp 1s ease-out forwards;
+            pointer-events: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px);
+            }
+        }
+
+        /* Hero attack animation */
+        .hero-attack {
+            animation: pulse 0.3s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        /* Enemy hit animation */
+        .enemy-hit {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            75% {
+                transform: translateX(10px);
+            }
+        }
+
+        /* Particle effect */
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: particleFly 1s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes particleFly {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty));
+            }
+        }
+
+        /* Combo counter */
+        #combo-counter {
+            font-size: 28px;
+            font-weight: bold;
+            color: #f39c12;
+            margin: 10px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Stats panel */
+        #stats-panel {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .stat-item {
+            margin: 5px 0;
+        }
+
+        /* Sound toggle button */
+        #sound-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 100;
+        }
+
+        #sound-toggle:hover {
+            background-color: #2980b9;
+        }
+
+        #sound-toggle.muted {
+            background-color: #e74c3c;
+        }
+
         @media (max-width: 768px) {
             #enemy {
                 font-size: 120px;
@@ -228,10 +347,25 @@
             #game-container {
                 padding: 0;
             }
+
+            #sound-toggle {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+
+            #stats-panel {
+                font-size: 12px;
+            }
+
+            .damage-number {
+                font-size: 24px;
+            }
         }
     </style>
 </head>
 <body>
+
+<button id="sound-toggle" onclick="toggleSound()">🔊 Sound On</button>
 
 <div id="game-container">
 
@@ -291,6 +425,14 @@
 
     <div class="hero-container" id="heroes-container"></div>
 
+    <div id="combo-counter"></div>
+
+    <div id="stats-panel">
+        <div class="stat-item">Enemies Defeated: <span id="enemies-defeated">0</span></div>
+        <div class="stat-item">Total Damage: <span id="total-damage">0</span></div>
+        <div class="stat-item">Manual Taps: <span id="manual-taps">0</span></div>
+    </div>
+
     <div id="timer"></div>
 </div>
 
@@ -343,6 +485,12 @@
     let currentMode = 'none';  
     let remainingTime;
     let timerInterval;
+    let soundEnabled = true;
+    let comboCount = 0;
+    let comboTimer = null;
+    let enemiesDefeated = 0;
+    let totalDamage = 0;
+    let manualTaps = 0;
 
     function resetGame(language) {
         if (currentMode === 'none') return;  // Do not reset until a mode is chosen
@@ -353,7 +501,12 @@
         currentEnemy = alphabet[alphabet.length - 1];  
         enemyHealth = 100; 
         maxEnemyHealth = 100;
-        gold = 0;  
+        gold = 0;
+        enemiesDefeated = 0;
+        totalDamage = 0;
+        manualTaps = 0;
+        comboCount = 0;
+        updateStats();
         document.getElementById('enemy').textContent = currentEnemy;  
         document.getElementById('current-letter-health').innerHTML = `${currentEnemy}'s Health: <span id="enemy-health-text">100</span>`;
         document.getElementById('gold-amount').textContent = gold;  
@@ -487,18 +640,39 @@
     }
 
     function tap(hero) {
-        applyDamage(hero);
-        playHeroSound(hero);  
+        applyDamage(hero, true);
+        playHeroSound(hero);
+        animateHero(hero);
+        incrementCombo();
+        manualTaps++;
+        updateStats();
     }
 
-    function applyDamage(hero) {
+    function applyDamage(hero, isManualTap = false) {
         if (enemyHealth > 0) {
-            enemyHealth -= heroes[hero].strength;
+            const damage = heroes[hero].strength * (isManualTap ? (1 + comboCount * 0.1) : 1);
+            const roundedDamage = Math.floor(damage);
+            enemyHealth -= roundedDamage;
             if (enemyHealth < 0) enemyHealth = 0;
+            
+            // Show damage number
+            showDamageNumber(roundedDamage, isManualTap);
+            
+            // Animate enemy hit
+            const enemyElement = document.getElementById('enemy');
+            enemyElement.classList.add('enemy-hit');
+            setTimeout(() => enemyElement.classList.remove('enemy-hit'), 300);
+            
             updateHealth();
-            gold += heroes[hero].strength;  
+            gold += roundedDamage;
+            totalDamage += roundedDamage;
             updateGold();
+            updateStats();
+            
             if (enemyHealth <= 0) {
+                enemiesDefeated++;
+                updateStats();
+                createParticles();
                 nextEnemy();
             }
         }
@@ -510,8 +684,15 @@
             heroes[hero].strength += 1; 
             heroUpgradeCosts[hero] = Math.floor(heroUpgradeCosts[hero] * upgradeCostMultiplier); 
             document.getElementById(`hero-${hero}-strength`).textContent = heroes[hero].strength;
+            // Update just the upgrade button text instead of redrawing all heroes
+            const upgradeButtons = document.querySelectorAll('.upgrade');
+            upgradeButtons.forEach(button => {
+                const heroLetter = button.getAttribute('onclick').match(/'(.+?)'/)[1];
+                if (heroLetter === hero) {
+                    button.textContent = `Lv+ (${heroUpgradeCosts[hero]}G)`;
+                }
+            });
             updateGold();
-            displayHeroes(); 
         } else {
             alert('Not enough G to upgrade!');
         }
@@ -554,6 +735,7 @@
     }
 
     function playVillainSound() {
+        if (!soundEnabled) return;
         if (currentUtterance) {
             synth.cancel(); 
         }
@@ -564,6 +746,7 @@
     }
 
     function playHeroSound(heroLetter) {
+        if (!soundEnabled) return;
         if (currentUtterance) {
             synth.cancel();  
         }
@@ -588,6 +771,97 @@
     function closeInitialModal() {
         const initialModal = document.getElementById("initialModal");
         initialModal.style.display = "none";
+    }
+
+    function toggleSound() {
+        soundEnabled = !soundEnabled;
+        const button = document.getElementById('sound-toggle');
+        if (soundEnabled) {
+            button.textContent = '🔊 Sound On';
+            button.classList.remove('muted');
+        } else {
+            button.textContent = '🔇 Sound Off';
+            button.classList.add('muted');
+            if (synth.speaking) {
+                synth.cancel();
+            }
+        }
+    }
+
+    function showDamageNumber(damage, isCombo) {
+        const enemyElement = document.getElementById('enemy');
+        const rect = enemyElement.getBoundingClientRect();
+        const damageNum = document.createElement('div');
+        damageNum.className = 'damage-number';
+        damageNum.textContent = isCombo && comboCount > 0 ? `-${damage} x${Math.floor(comboCount + 1)}` : `-${damage}`;
+        damageNum.style.left = (rect.left + rect.width / 2) + 'px';
+        damageNum.style.top = (rect.top + rect.height / 2) + 'px';
+        damageNum.style.position = 'fixed';
+        if (isCombo && comboCount > 0) {
+            damageNum.style.color = '#f39c12';
+            damageNum.style.fontSize = '40px';
+        }
+        document.body.appendChild(damageNum);
+        setTimeout(() => damageNum.remove(), 1000);
+    }
+
+    function animateHero(hero) {
+        const heroElement = document.getElementById(`hero-${hero}`);
+        heroElement.classList.add('hero-attack');
+        setTimeout(() => heroElement.classList.remove('hero-attack'), 300);
+    }
+
+    function incrementCombo() {
+        comboCount++;
+        updateCombo();
+        if (comboTimer) {
+            clearTimeout(comboTimer);
+        }
+        comboTimer = setTimeout(() => {
+            comboCount = 0;
+            updateCombo();
+        }, 2000);
+    }
+
+    function updateCombo() {
+        const comboElement = document.getElementById('combo-counter');
+        if (comboCount > 0) {
+            comboElement.textContent = `Combo x${comboCount + 1}!`;
+        } else {
+            comboElement.textContent = '';
+        }
+    }
+
+    function createParticles() {
+        const enemyElement = document.getElementById('enemy');
+        const rect = enemyElement.getBoundingClientRect();
+        const colors = ['#f39c12', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6'];
+        
+        for (let i = 0; i < 15; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.left = (rect.left + rect.width / 2) + 'px';
+            particle.style.top = (rect.top + rect.height / 2) + 'px';
+            particle.style.position = 'fixed';
+            
+            const angle = (Math.PI * 2 * i) / 15;
+            const distance = 100 + Math.random() * 50;
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance;
+            
+            particle.style.setProperty('--tx', tx + 'px');
+            particle.style.setProperty('--ty', ty + 'px');
+            
+            document.body.appendChild(particle);
+            setTimeout(() => particle.remove(), 1000);
+        }
+    }
+
+    function updateStats() {
+        document.getElementById('enemies-defeated').textContent = enemiesDefeated;
+        document.getElementById('total-damage').textContent = totalDamage;
+        document.getElementById('manual-taps').textContent = manualTaps;
     }
 
     window.onload = function() {
